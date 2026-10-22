@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string-array name="genuri_literare">
+        <item>Roman</item>
+        <item>SF</item>
+        <item>Istorie</item>
+        <item>Biografie</item>
+    </string-array>
+</resources>

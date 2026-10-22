@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adauga o Carte"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <EditText
+        android:id="@+id/etTitlu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Titlul Cartii"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/etAutor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Autorul Cartii"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/etPagini"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Numar de Pagini"
+        android:inputType="number" />
+
+    <CheckBox
+        android:id="@+id/cbCitita"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Am citit cartea" />
+
+    <RadioGroup
+        android:id="@+id/rgFormat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbFizic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Format fizic" />
+
+        <RadioButton
+            android:id="@+id/rbDigital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Format digital" />
+
+    </RadioGroup>
+
+    <Spinner
+        android:id="@+id/spGenLit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/genuri_literare"
+        />
+
+    <RatingBar
+        android:id="@+id/ratingCarte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1"
+        android:rating="0" />
+
+    <Switch
+        android:id="@+id/swDisponibila"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:text="Disponibila" />
+
+    <Button
+        android:id="@+id/btnSalveaza"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salveaza Cartea" />
+</LinearLayout>
