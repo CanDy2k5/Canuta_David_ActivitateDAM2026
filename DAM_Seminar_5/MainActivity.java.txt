@@ -1,0 +1,110 @@
+
+package com.example.myapplication;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<Carte> listaCarti = new ArrayList<>();
+
+    private ActivityResultLauncher<Intent> launcher;
+    private ActivityResultLauncher<Intent> launcherListaCarti;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+
+        TextView tvCarte = findViewById(R.id.tvCarte);
+
+        // Primirea unei carti din AdaugaCarte
+        launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK &&
+                            result.getData() != null) {
+
+                        Bundle bundle = result.getData().getExtras();
+
+                        if (bundle != null) {
+                            Carte carte = (Carte) bundle.getSerializable("carte");
+
+                            if (carte != null) {
+                                listaCarti.add(carte);
+                                tvCarte.setText(carte.toString());
+                            }
+                        }
+                    }
+                }
+        );
+
+        // Primirea listei actualizate din ListaCarti
+        launcherListaCarti = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK &&
+                            result.getData() != null) {
+
+                        ArrayList<Carte> listaActualizata =
+                                (ArrayList<Carte>) result.getData()
+                                        .getSerializableExtra("listaCarti");
+
+                        if (listaActualizata != null) {
+                            listaCarti.clear();
+                            listaCarti.addAll(listaActualizata);
+                        }
+                    }
+                }
+        );
+
+        // Buton pentru adaugarea unei carti
+        Button btnAdaugaCarte = findViewById(R.id.buttonAdd);
+
+        btnAdaugaCarte.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AdaugaCarte.class);
+            launcher.launch(intent);
+        });
+
+        // Buton pentru afisarea listei de carti
+        Button btnListaCarti = findViewById(R.id.btnListaCarti);
+
+        btnListaCarti.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ListaCarti.class);
+            intent.putExtra("listaCarti", listaCarti);
+            launcherListaCarti.launch(intent);
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+                findViewById(R.id.main),
+                (v, insets) -> {
+                    Insets systemBars = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                    );
+
+                    v.setPadding(
+                            systemBars.left,
+                            systemBars.top,
+                            systemBars.right,
+                            systemBars.bottom
+                    );
+
+                    return insets;
+                }
+        );
+    }
+}

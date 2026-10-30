@@ -1,0 +1,108 @@
+package com.example.myapplication;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.RatingBar;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class AdaugaCarte extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_adauga_carte);
+
+        EditText etTitlu = findViewById(R.id.etTitlu);
+        EditText etAutor = findViewById(R.id.etAutor);
+        EditText etPagini = findViewById(R.id.etPagini);
+
+        CheckBox cbCitita = findViewById(R.id.cbCitita);
+        RadioGroup rgFormat = findViewById(R.id.rgFormat);
+        Spinner spGen = findViewById(R.id.spGenLit);
+        RatingBar ratingCarte = findViewById(R.id.ratingCarte);
+        Switch swDisponibila = findViewById(R.id.swDisponibila);
+
+        Button btnSalveaza = findViewById(R.id.btnSalveaza);
+        btnSalveaza.setOnClickListener(v -> {
+            String titlu = etTitlu.getText().toString();
+            String autor = etAutor.getText().toString();
+            String paginiText = etPagini.getText().toString();
+
+            if (titlu.isEmpty() || autor.isEmpty() || paginiText.isEmpty()) {
+                Toast.makeText(this, "Completeaza toate campurile!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int numarPagini = Integer.parseInt(paginiText);
+
+            // CheckBox
+            boolean citita = cbCitita.isChecked();
+
+// RadioGroup
+            int idSelectat = rgFormat.getCheckedRadioButtonId();
+
+            String format = "Neselectat";
+
+            if (idSelectat == R.id.rbFizic) {
+                format = "Fizic";
+            } else if (idSelectat == R.id.rbDigital) {
+                format = "Digital";
+            }
+
+            // Spinner
+            String gen = spGen.getSelectedItem().toString();
+
+            // RatingBar
+            float evaluare = ratingCarte.getRating();
+
+            // Switch
+            boolean disponibila = swDisponibila.isChecked();
+
+
+            Carte carte = new Carte(
+                    titlu,
+                    autor,
+                    numarPagini,
+                    citita,
+                    format,
+                    gen,
+                    evaluare,
+                    disponibila
+            );
+
+            carte.afisare();
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("carte", carte);
+
+            Intent intent = new Intent();
+            intent.putExtras(bundle);
+
+            Toast.makeText(this, "Cartea a fost adaugata!", Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK, intent);
+            finish();
+
+
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+}

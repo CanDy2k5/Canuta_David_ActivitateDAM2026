@@ -1,0 +1,63 @@
+
+package com.example.myapplication;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+
+public class ListaCarti extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lista_carti);
+
+        ListView listViewCarti = findViewById(R.id.listViewCarti);
+
+        ArrayList<Carte> listaPrimita =
+                (ArrayList<Carte>) getIntent().getSerializableExtra("listaCarti");
+
+        final ArrayList<Carte> listaCarti =
+                listaPrimita != null ? listaPrimita : new ArrayList<>();
+
+        ArrayAdapter<Carte> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                listaCarti
+        );
+
+        listViewCarti.setAdapter(adapter);
+
+
+        listViewCarti.setOnItemLongClickListener((parent, view, position, id) -> {
+            listaCarti.remove(position);
+            adapter.notifyDataSetChanged();
+
+            Intent intent = new Intent();
+            intent.putExtra("listaCarti", listaCarti);
+            setResult(RESULT_OK, intent);
+
+            Toast.makeText(this, "Cartea a fost stearsa!", Toast.LENGTH_SHORT).show();
+
+            return true;
+        });
+
+
+        listViewCarti.setOnItemClickListener((parent, view, position, id) -> {
+            Carte carteSelectata = (Carte) parent.getItemAtPosition(position);
+
+            Toast.makeText(
+                    ListaCarti.this,
+                    carteSelectata.toString(),
+                    Toast.LENGTH_LONG
+            ).show();
+        });
+
+    }
+}
